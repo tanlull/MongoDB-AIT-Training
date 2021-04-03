@@ -143,4 +143,7 @@ db.products.updateMany(
     { $unset: { "isBestSeller": true } }
 );
 
-// DELETE
+// DELETE 
+db.products.deleteMany(
+    { "isOutofStock": true }
+);
