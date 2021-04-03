@@ -1,6 +1,8 @@
-//All commands
+## Cut & Paste these commands to MongoCompass
+
+
 //1. Switch database
-use DSAIdb;
+use company;
 
 //2. Simple Query 
 //db.<collection-name>.find();

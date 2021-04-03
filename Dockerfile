@@ -1,4 +1,3 @@
 FROM mongo
-WORKDIR /data
+WORKDIR /docker-entrypoint-initdb.d
 COPY ./data .
-#RUN ./import.sh
