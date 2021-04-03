@@ -32,9 +32,9 @@ db.products.find({ "name": { $regex: /chocolate/ } });
 //Q1. Showing all products having price greater than 500, quantity lower than 50 and tagged by the word  kids
 
 db.products.find({
-    "price": { $gt: 500 },
-    "quantity": { $lt: 50 },
-    "tag": { $in: ["kids"] }
+    "price": { $gt: 50 },
+    "quantity": { $lt: 100 },
+    "tag": { $in: ["men"] }
 });
 
 
@@ -93,7 +93,7 @@ db.products.insertMany([
         "addBy": "Tanya"
     },
     {
-        "name": "สบู่2",
+        "name": "สบู่3",
         "description": "Soap Soap Soap Soap 333",
         "price": 10,
         "tag": ["a", "b"],
