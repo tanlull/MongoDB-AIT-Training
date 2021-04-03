@@ -147,3 +147,116 @@ db.products.updateMany(
 db.products.deleteMany(
     { "isOutofStock": true }
 );
+
+// Aggregate
+db.sales.aggregate(
+    [
+        { $match: { "totalPrice": { $exists: true } } },
+        { $group: { "_id": "$customer.gender", "totalSales": { $sum: "$totalPrice" } } }
+
+    ]
+)
+
+// No Count Function then create by our own
+db.sales.aggregate(
+    [
+        { $match: { "totalPrice": { $exists: true } } },
+        { $group: { "_id": "$customer.gender", "noOfSales": { $sum: 1 } } }
+
+    ]
+)
+
+// Show sum of totalPrice grouped by customerRating own
+db.sales.aggregate(
+    [
+        { $match: { "totalPrice": { $exists: true } } },
+        { $group: { "_id": "$customer.customerRating", "totalSales": { $sum: "$totalPrice" } } }
+
+    ]
+)
+
+//how many cusotmer who used and did not use coupon in sales data
+
+db.sales.aggregate(
+    [
+        { $match: { "couponUsed": false } },
+        { $group: { "_id": "$couponUsed", "noCouponUsed": { $sum: 1 } } }
+
+    ]
+)
+
+// Count -- group by couponUsed
+db.sales.aggregate(
+    [
+        { $group: { "_id": "$couponUsed", "CouponUsed": { $sum: 1 } } }
+
+    ]
+)
+
+// Group by store location and couponused
+db.sales.aggregate(
+    [
+        {
+            $group: {
+                "_id": ["$storeLocation", "$couponUsed"],
+                "CouponUsed": { $sum: 1 }
+            }
+        },
+    ]
+)
+
+
+// group 2 column , and sort
+db.sales.aggregate(
+    [
+        {
+            $group: {
+                "_id": { "location": "$storeLocation", "coupon": "$couponUsed" },
+                "CouponUsed": { $sum: 1 }
+            }
+        },
+        { $sort: { "_id.location": 1, "CouponUsed": -1 } }
+    ]
+)
+
+// limit number of display
+db.sales.aggregate(
+    [
+        {
+            $group: {
+                "_id": { "location": "$storeLocation", "coupon": "$couponUsed" },
+                "CouponUsed": { $sum: 1 }
+            }
+        },
+        { $sort: { "CouponUsed": -1, "_id.location": 1 } },
+        { $limit: 3 }
+    ]
+)
+
+// Unwind --> expand array object to eact json doc
+db.sales.aggregate([
+    { $unwind: { path: "$items" } },
+    { $sort: { "_id": -1 } },
+]);
+
+
+//select top 3 products by total qty
+db.sales.aggregate([
+    { $unwind: { path: "$items" } },
+    { $group: { "_id": "$items.name", "qty": { $sum: "$items.quantity" } } },
+    { $sort: { "qty": -1 } },
+    { $limit: 3 }
+]);
+
+// Group and source
+db.sales.aggregate([
+    {
+        $group: {
+            "_id": { $month: "$saleDate" },
+            "NoOfSales": { $sum: 1 },
+            "TotalSales": { $sum: "$totalPrice" },
+            "AvgSales": { $avg: "$totalPrice" }
+        }
+    },
+    { $sort: { "_id": 1 } },
+]);

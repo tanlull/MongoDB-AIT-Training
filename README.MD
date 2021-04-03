@@ -1,13 +1,16 @@
-## Docker Run
+################################
+docker build -t drtan/mongodb .
 
-mkdir data
-docker run --name my-mongo -d -p 27018:27017 -v ./data:/data/db mongo
+docker run --name my-mongodb -p 27018:27017 -d drtan/mongodb
+
+docker exec -it my-mongodb sh
+
+docker exec -it my-mongodb24 mongo admin
 
 ## Mongo shell Command
 
-docker exec -it my-mongo mongo admin
 show dbs
 
 ## Connection String mongo Compass
 
-mongodb://localhost:27018
+mongodb://localhost:27017
