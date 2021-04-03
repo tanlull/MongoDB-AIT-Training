@@ -136,3 +136,9 @@ db.products.updateMany(
 db.products.find(
     { "addBy": "Tanya" },
 );
+
+// Remove field
+db.products.updateMany(
+    { "_id": ObjectId("6067e9fc72b04b5bb48e2365") },
+    { $unset: { "isBestSeller": true } }
+);
